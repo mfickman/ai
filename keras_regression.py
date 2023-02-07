@@ -78,12 +78,7 @@ print("Standard Deviation of MSE:", std_mse)
 
 
 
-
-
-
-
-
-Part B
+print('Part B')
 
 # Load the data
 data = pd.read_csv("concrete_data.csv")
@@ -130,7 +125,7 @@ print("Standard Deviation of MSE:", std_mse)
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
-Part C
+print('Part C')
 
 
 # Load the data
@@ -159,6 +154,51 @@ for i in range(50):
   model.compile(optimizer=Adam(lr=0.001), loss="mean_squared_error")
 
   # Train the model
+  model.fit(X_train, y_train, epochs=100, verbose=0)
+
+  # Evaluate the model on the test data
+  y_pred = model.predict(X_test)
+  mse = mean_squared_error(y_test, y_pred)
+  mse_list.append(mse)
+
+# Calculate the mean and standard deviation of the mean squared errors
+mean_mse = np.mean(mse_list)
+std_mse = np.std(mse_list)
+
+print("Mean MSE:", mean_mse)
+print("Standard Deviation of MSE:", std_mse)
+
+print('part D')
+
+
+# Load the data
+data = pd.read_csv("concrete_data.csv")
+
+# Split the data into input and output variables
+X = data.iloc[:, :-1].values
+y = data.iloc[:, -1].values
+
+# Normalize the input variables
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Create a list to store the mean squared errors
+mse_list = []
+
+# Repeat the process 50 times
+for i in range(50):
+  # Split the data into training and test sets
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+  # Build the model
+  model = Sequential()
+  model.add(Dense(10, activation="relu", input_shape=(8,)))
+  model.add(Dense(10, activation="relu"))
+  model.add(Dense(10, activation="relu"))
+  model.add(Dense(1))
+  model.compile(optimizer=Adam(lr=0.001), loss="mean_squared_error")
+
+  # Train the model for 100 epochs
   model.fit(X_train, y_train, epochs=100, verbose=0)
 
   # Evaluate the model on the test data
